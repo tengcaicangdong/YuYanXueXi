@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>831</width>
-    <height>542</height>
+    <height>545</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,23 +28,6 @@
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="5" column="0">
           <widget class="QLineEdit" name="FYShuRu"/>
-         </item>
-         <item row="0" column="4">
-          <widget class="QLabel" name="FYaiDuiHuaKuang">
-           <property name="minimumSize">
-            <size>
-             <width>300</width>
-             <height>350</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: 2px solid black;
-border-radius: 10px;</string>
-           </property>
-           <property name="text">
-            <string>ai会话等待中</string>
-           </property>
-          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QPushButton" name="FYXiaYiTi">
@@ -67,6 +50,9 @@ border-radius: 10px;</string>
            </property>
            <property name="text">
             <string>等待中</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -97,15 +83,32 @@ border-radius: 10px;</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="4">
-          <widget class="QLineEdit" name="FYaiShuRu"/>
-         </item>
-         <item row="2" column="4" rowspan="2">
-          <widget class="QLabel" name="FYaiZhuangTai">
+         <item row="3" column="1">
+          <widget class="QPushButton" name="FYKaiShi">
            <property name="text">
-            <string>暂未连接</string>
+            <string>确认题库</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="QTextEdit" name="FYaiDuiHuaKuang">
+           <property name="minimumSize">
+            <size>
+             <width>300</width>
+             <height>350</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="4">
+          <widget class="QPushButton" name="FYaiQingKong">
+           <property name="text">
+            <string>清空</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="4">
+          <widget class="QLineEdit" name="FYaiShuRu"/>
          </item>
         </layout>
        </widget>
@@ -159,60 +162,67 @@ border-radius: 10px;</string>
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="DCKaiShi">
+           <property name="text">
+            <string>开始</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="1">
-            <widget class="QLabel" name="DCb">
-             <property name="text">
-              <string>选项b</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="DCa">
-             <property name="text">
-              <string>选项a</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="DCc">
-             <property name="text">
-              <string>选项c</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <widget class="QLabel" name="DCd">
-             <property name="text">
-              <string>选项d</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QPushButton" name="DCA">
-             <property name="text">
-              <string>a</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QPushButton" name="DCB">
-             <property name="text">
-              <string>b</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
+           <item row="3" column="2">
             <widget class="QPushButton" name="DCC">
              <property name="text">
               <string>c</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="3">
+           <item row="3" column="1">
+            <widget class="QPushButton" name="DCB">
+             <property name="text">
+              <string>b</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="DCa">
+             <property name="text">
+              <string>选项a</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="DCb">
+             <property name="text">
+              <string>选项b</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="DCc">
+             <property name="text">
+              <string>选项c</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
             <widget class="QPushButton" name="DCD">
              <property name="text">
               <string>d</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QLabel" name="DCd">
+             <property name="text">
+              <string>选项d</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QPushButton" name="DCA">
+             <property name="text">
+              <string>a</string>
              </property>
             </widget>
            </item>
@@ -331,7 +341,7 @@ border-radius: 10px;</string>
                   <item>
                    <widget class="QPushButton" name="SZYunYing">
                     <property name="text">
-                     <string>切换</string>
+                     <string>启动语音开关</string>
                     </property>
                    </widget>
                   </item>
