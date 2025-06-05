@@ -85,8 +85,7 @@ if __name__=='__main__':
     c='バント,楽しいって思った,一度もない'
     d='从没觉得乐队有意思过'
     e='chZnGPGkWfLKZJBBMomh:AtBBZWHdtYlKoMNkNAsI'
-    #AIapi_FYShuJu(d,c,e)
+    AIapi_FYShuJu(d,c,e)
     print(AIapi_DuiHua('你是谁',e))
-
     #YunYanLieBiao()
     #FYTiKu('RiYu','jiLei')

@@ -13,6 +13,7 @@ class window(QWidget,Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle('语通智学')
+        SZlib.SZShuJu()
         ShiZhi=open('shuju\\she_zhi.txt',mode='r',encoding='utf-8')
         
         self.XieChengChi=asyncio.new_event_loop()
@@ -44,6 +45,7 @@ class window(QWidget,Ui_Form):
 
 
         self.SZYuYingXianShi.setText(self.YunYin)
+        self.SZaiMoXingBaoCun.clicked.connect(self.SZaiMoXingMiYao)
         
         ShiZhi.close()
         if self.YunYin=='True\n': 
@@ -51,7 +53,7 @@ class window(QWidget,Ui_Form):
 
 
         self.SZYunYing.clicked.connect(lambda: self.SZJMYuYin(SZlib.SZGengGaiYuYin))
-    
+
     def kong():
         return 
 
@@ -128,6 +130,12 @@ class window(QWidget,Ui_Form):
             self.SZYuYingXianShi.setText('True')
             self.SZYuYingXianShi.setText('True')
             ZX()
+    
+    def SZaiMoXingMiYao(self):
+        MiYao=self.SZaiMoXingShuRu.text()
+        self.FYMiYao=MiYao
+        SZlib.SZGengGaiMiYao(MiYao)
+
 
             
 app=QApplication([])

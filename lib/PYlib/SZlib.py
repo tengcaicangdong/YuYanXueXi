@@ -13,5 +13,21 @@ def SZGengGaiYuYin():
             f.write('True'+'\n')
             f.write(duqu[1])
 
+def SZGengGaiMiYao(MiYao):
+    with open( 'shuju\\she_zhi.txt',mode='r',encoding='utf-8') as f:
+        shuju=f.readline()
+    with open('shuju\\she_zhi.txt',mode='w',encoding='utf-8') as f:
+        f.write(shuju)
+        f.write(MiYao)
+        
+def SZShuJu():
+    shujuwenjian=os.listdir('shuju')
+    for i in shujuwenjian:
+        if 'she_zhi.txt' in shujuwenjian:
+            None
+        else:
+            with open('shuju\\she_zhi.txt',mode='w',encoding='utf-8')  as f:
+                f.write('Flase\n')      
 if __name__=="__main__":
-    SZGengGaiYuYin()
+    SZShuJu()
+    SZGengGaiMiYao('chZnGPGkWfLKZJBBMomh:AtBBZWHdtYlKoMNkNAsI')
