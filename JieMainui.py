@@ -115,7 +115,7 @@ class Ui_Form(object):
 
         self.DCTiKu = QComboBox(self.DanCiJM)
         self.DCTiKu.setObjectName(u"DCTiKu")
-        self.DCTiKu.setMinimumSize(QSize(300, 0))
+        self.DCTiKu.setMinimumSize(QSize(250, 0))
 
         self.horizontalLayout.addWidget(self.DCTiKu)
 
@@ -123,6 +123,11 @@ class Ui_Form(object):
         self.DCYuYan.setObjectName(u"DCYuYan")
 
         self.horizontalLayout.addWidget(self.DCYuYan)
+
+        self.DCQueDingTiKu = QPushButton(self.DanCiJM)
+        self.DCQueDingTiKu.setObjectName(u"DCQueDingTiKu")
+
+        self.horizontalLayout.addWidget(self.DCQueDingTiKu)
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout)
@@ -132,15 +137,15 @@ class Ui_Form(object):
 
         self.verticalLayout_4.addWidget(self.DCShangYiTi)
 
-        self.pushButton = QPushButton(self.DanCiJM)
-        self.pushButton.setObjectName(u"pushButton")
+        self.DCXiaYiTi = QPushButton(self.DanCiJM)
+        self.DCXiaYiTi.setObjectName(u"DCXiaYiTi")
 
-        self.verticalLayout_4.addWidget(self.pushButton)
+        self.verticalLayout_4.addWidget(self.DCXiaYiTi)
 
-        self.DCKaiShi = QPushButton(self.DanCiJM)
-        self.DCKaiShi.setObjectName(u"DCKaiShi")
+        self.DCQueDing = QPushButton(self.DanCiJM)
+        self.DCQueDing.setObjectName(u"DCQueDing")
 
-        self.verticalLayout_4.addWidget(self.DCKaiShi)
+        self.verticalLayout_4.addWidget(self.DCQueDing)
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
@@ -373,9 +378,10 @@ class Ui_Form(object):
         self.FYaiQingKong.setText(QCoreApplication.translate("Form", u"\u6e05\u7a7a", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.FanYiJM), QCoreApplication.translate("Form", u"\u7ffb\u8bd1", None))
         self.DCTiMuKuang.setText(QCoreApplication.translate("Form", u"\u7b49\u5f85\u4e2d", None))
+        self.DCQueDingTiKu.setText(QCoreApplication.translate("Form", u"\u786e\u5b9a\u9898\u5e93", None))
         self.DCShangYiTi.setText(QCoreApplication.translate("Form", u"\u4e0a\u4e00\u9898", None))
-        self.pushButton.setText(QCoreApplication.translate("Form", u"\u4e0b\u4e00\u9898", None))
-        self.DCKaiShi.setText(QCoreApplication.translate("Form", u"\u5f00\u59cb", None))
+        self.DCXiaYiTi.setText(QCoreApplication.translate("Form", u"\u4e0b\u4e00\u9898", None))
+        self.DCQueDing.setText(QCoreApplication.translate("Form", u"\u786e\u5b9a", None))
         self.DCC.setText(QCoreApplication.translate("Form", u"c", None))
         self.DCB.setText(QCoreApplication.translate("Form", u"b", None))
         self.DCa.setText(QCoreApplication.translate("Form", u"\u9009\u9879a", None))

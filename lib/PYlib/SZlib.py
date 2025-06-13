@@ -27,7 +27,8 @@ def SZShuJu():
             None
         else:
             with open('shuju\\she_zhi.txt',mode='w',encoding='utf-8')  as f:
-                f.write('Flase\n')      
+                f.write('Flase\n')    
+
 if __name__=="__main__":
     SZShuJu()
     SZGengGaiMiYao('chZnGPGkWfLKZJBBMomh:AtBBZWHdtYlKoMNkNAsI')
