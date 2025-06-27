@@ -24,9 +24,9 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(831, 545)
-        self.gridLayout_3 = QGridLayout(Form)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        Form.resize(831, 537)
+        self.verticalLayout_7 = QVBoxLayout(Form)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.tabWidget = QTabWidget(Form)
@@ -197,20 +197,53 @@ class Ui_Form(object):
         self.XueXiQingKuangJM.setObjectName(u"XueXiQingKuangJM")
         self.gridLayout_8 = QGridLayout(self.XueXiQingKuangJM)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.gridLayout_7 = QGridLayout()
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.QKHuiTu = QWidget(self.XueXiQingKuangJM)
-        self.QKHuiTu.setObjectName(u"QKHuiTu")
+        self.KQDaoChu = QPushButton(self.XueXiQingKuangJM)
+        self.KQDaoChu.setObjectName(u"KQDaoChu")
 
-        self.gridLayout_7.addWidget(self.QKHuiTu, 0, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.KQDaoChu, 3, 0, 1, 1)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.KQTianHuiTu = QPushButton(self.XueXiQingKuangJM)
+        self.KQTianHuiTu.setObjectName(u"KQTianHuiTu")
+
+        self.horizontalLayout_4.addWidget(self.KQTianHuiTu)
+
+        self.KQZhouHuiTu = QPushButton(self.XueXiQingKuangJM)
+        self.KQZhouHuiTu.setObjectName(u"KQZhouHuiTu")
+
+        self.horizontalLayout_4.addWidget(self.KQZhouHuiTu)
+
+        self.KQYueHuiTu = QPushButton(self.XueXiQingKuangJM)
+        self.KQYueHuiTu.setObjectName(u"KQYueHuiTu")
+
+        self.horizontalLayout_4.addWidget(self.KQYueHuiTu)
+
+        self.QKYunYan = QComboBox(self.XueXiQingKuangJM)
+        self.QKYunYan.setObjectName(u"QKYunYan")
+
+        self.horizontalLayout_4.addWidget(self.QKYunYan)
 
 
-        self.gridLayout_8.addLayout(self.gridLayout_7, 0, 0, 1, 1)
+        self.gridLayout_8.addLayout(self.horizontalLayout_4, 2, 0, 1, 1)
 
-        self.QKDaoChu = QPushButton(self.XueXiQingKuangJM)
-        self.QKDaoChu.setObjectName(u"QKDaoChu")
+        self.QKHuiTuZhuangTai = QLabel(self.XueXiQingKuangJM)
+        self.QKHuiTuZhuangTai.setObjectName(u"QKHuiTuZhuangTai")
 
-        self.gridLayout_8.addWidget(self.QKDaoChu, 1, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.QKHuiTuZhuangTai, 1, 0, 1, 1)
+
+        self.KQTuiTuChuangKuo = QWidget(self.XueXiQingKuangJM)
+        self.KQTuiTuChuangKuo.setObjectName(u"KQTuiTuChuangKuo")
+        self.KQTuiTuChuangKuo.setMinimumSize(QSize(350, 300))
+        self.horizontalLayout_6 = QHBoxLayout(self.KQTuiTuChuangKuo)
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.QKTuiTuBuJu = QHBoxLayout()
+        self.QKTuiTuBuJu.setObjectName(u"QKTuiTuBuJu")
+
+        self.horizontalLayout_6.addLayout(self.QKTuiTuBuJu)
+
+
+        self.gridLayout_8.addWidget(self.KQTuiTuChuangKuo, 0, 0, 1, 1)
 
         self.tabWidget.addTab(self.XueXiQingKuangJM, "")
         self.ShuJuSheZhiJM = QWidget()
@@ -351,12 +384,7 @@ class Ui_Form(object):
         self.gridLayout.addWidget(self.tabWidget, 0, 0, 1, 1)
 
 
-        self.gridLayout_3.addLayout(self.gridLayout, 0, 0, 1, 1)
-
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-
-        self.gridLayout_3.addLayout(self.verticalLayout, 1, 0, 1, 1)
+        self.verticalLayout_7.addLayout(self.gridLayout)
 
 
         self.retranslateUi(Form)
@@ -391,7 +419,11 @@ class Ui_Form(object):
         self.DCd.setText(QCoreApplication.translate("Form", u"\u9009\u9879d", None))
         self.DCA.setText(QCoreApplication.translate("Form", u"a", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.DanCiJM), QCoreApplication.translate("Form", u"\u5355\u8bcd", None))
-        self.QKDaoChu.setText(QCoreApplication.translate("Form", u"\u5bfc\u51fa", None))
+        self.KQDaoChu.setText(QCoreApplication.translate("Form", u"\u5bfc\u51fa", None))
+        self.KQTianHuiTu.setText(QCoreApplication.translate("Form", u"\u6309\u5929\u7ed8\u56fe", None))
+        self.KQZhouHuiTu.setText(QCoreApplication.translate("Form", u"\u6309\u5468\u7ed8\u56fe", None))
+        self.KQYueHuiTu.setText(QCoreApplication.translate("Form", u"\u6309\u6708\u7ed8\u56fe", None))
+        self.QKHuiTuZhuangTai.setText(QCoreApplication.translate("Form", u"\u72b6\u6001\u663e\u793a", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.XueXiQingKuangJM), QCoreApplication.translate("Form", u"\u5b66\u4e60\u60c5\u51b5", None))
         ___qtablewidgetitem = self.SJBiao.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("Form", u"\u65b0\u5efa\u5217", None));

@@ -1,13 +1,17 @@
 from PySide6.QtWidgets import QApplication,QWidget
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer,QDateTime,Qt
+from PySide6.QtCharts import QChart, QChartView,QDateTimeAxis, QLineSeries
+from PySide6.QtGui import QPainter
 from lib.PYlib import FYlib
 from lib.PYlib import SZlib
+from lib.PYlib import QKlib
 from lib.PYlib import DClib
 from JieMainui import Ui_Form
 from concurrent.futures import ThreadPoolExecutor
 from playsound import playsound
 import asyncio
 import random
+
 
 class window(QWidget,Ui_Form):
 
@@ -21,6 +25,10 @@ class window(QWidget,Ui_Form):
         self.ChengXunChuShiHua()        
         self.XieChengChi=asyncio.new_event_loop()
         self.XianChengChi=ThreadPoolExecutor(25)
+        self.FYRiQi=None
+        self.DCRiQi=None
+        self.ZongHeRiQi=None
+        
 
         self.FYTiKuWenJianLiBiao=None
         self.FYaiFanHui=None
@@ -60,9 +68,17 @@ class window(QWidget,Ui_Form):
         self.DCD.clicked.connect(lambda:self.DCTiMuDaAnQueDing(self.DCd.text()))
         self.DCShangYiTi.clicked.connect(lambda:self.DCShangXiaTi(-1))
         self.DCXiaYiTi.clicked.connect(lambda:self.DCShangXiaTi(1))
+        self.DCQueDing.clicked.connect(lambda: QKlib.QKBaoCunLuoJi(f'{self.DCZhengQueDaAn}',self.DCRiQi))
         self.DCQueDing.clicked.connect(lambda:self.DCShangXiaTi(1))
 
-        
+        self.QKHuiTuDCShuJu=QLineSeries()
+        self.QKHuiTuFYShuJu=QLineSeries()
+        self.QKHuiTuRongQi=QChart()
+        self.QKHuiTuSheZhi()
+        self.QKHuiTuRongQiview = QChartView(self.QKHuiTuRongQi)
+        self.QKHuiTuRongQiview.setRenderHint(QPainter.Antialiasing)
+        self.QKTuiTuBuJu.addWidget(self.QKHuiTuRongQiview)
+
 
         self.SZYuYingXianShi.setText(self.YunYin)
         self.SZaiMoXingBaoCun.clicked.connect(self.SZaiMoXingMiYao)
@@ -80,7 +96,9 @@ class window(QWidget,Ui_Form):
         self.FYTiKu.clear()
         self.FYTiKu.addItems(FYlib.FYTiKu(self.FYYuYan.currentText()))
 
-    def FyKaiShiLuoJi(self):      
+    def FyKaiShiLuoJi(self): 
+        self.QKQueRenRiQIWenJian(self.FYYuYan.currentText(),'FY')
+        self.FYTiMuWeiZhi=0    
         self.FYTiKuWenJianLiBiao = FYlib.FYShuJuDuQu(self.FYYuYan.currentText(),self.FYTiKu.currentText())
         FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
         self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
@@ -100,11 +118,18 @@ class window(QWidget,Ui_Form):
                 else :
                     self.FYXianShi.setText(f'已经是最后一题了')
             else:
-                self.FYWeiZhiBianHua=1
-                self.FYTiMuWeiZhi+=WeiZhiBianDong
-                FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
-                self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
-                
+                if self.FYTiMuWeiZhi <=-1 :
+                    self.FYWeiZhiBianHua=1
+                    self.FYTiMuWeiZhi+=WeiZhiBianDong
+                    QKlib.QKBaoCunLuoJi(self.FYShuRu.text()+f'#{self.FYTiKuWenJianLiBiao[self.FYTiMuWeiZhi]}',self.FYRiQi)
+                    FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
+                    self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
+                else:
+                    QKlib.QKBaoCunLuoJi(self.FYShuRu.text()+f'#{self.FYTiKuWenJianLiBiao[self.FYTiMuWeiZhi]}',self.FYRiQi)
+                    self.FYWeiZhiBianHua=1
+                    self.FYTiMuWeiZhi+=WeiZhiBianDong
+                    FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
+                    self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
         else:
             if self.FYTiMuWeiZhi-1<=-1:
                 if self.FYTiMuWeiZhi-1==-1:
@@ -113,18 +138,25 @@ class window(QWidget,Ui_Form):
                     self.FYXianShi.setText(f'请下一题')
                 else:
                     self.FYXianShi.setText(f'请下一题')
-            else: 
-                self.FYWeiZhiBianHua=-1
-                self.FYTiMuWeiZhi+=WeiZhiBianDong
-                FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
-                self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
+            else:
+                if self.FYTiMuWeiZhi==len(self.FYTiKuWenJianLiBiao):
+                    self.FYWeiZhiBianHua=-1
+                    self.FYTiMuWeiZhi+=WeiZhiBianDong
+                    QKlib.QKBaoCunLuoJi(self.FYShuRu.text()+f'#{self.FYTiKuWenJianLiBiao[self.FYTiMuWeiZhi]}',self.FYRiQi)
+                    FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
+                    self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
+                else:
+                    self.FYWeiZhiBianHua=-1
+                    QKlib.QKBaoCunLuoJi(self.FYShuRu.text()+f'#{self.FYTiKuWenJianLiBiao[self.FYTiMuWeiZhi]}',self.FYRiQi)
+                    self.FYTiMuWeiZhi+=WeiZhiBianDong
+                    FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
+                    self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
                 
             
     def FYShuruKuangLuoJi(self):
         self.FYXianShi.setText(self.FYXianShi.text()+'\n'+'你的答案是：'+self.FYShuRu.text()+f'\n{'参考答案是：'+FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)[1]}')
         self.FYaiDuiHuaKuangluojiFaSong()
 
-    
 
     def FYaiDuiHuaKuangluojiFaSong(self):
         fa_song=lambda : FYlib.AIapi_FYShuJu(self.FYShuRu.text(),FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)[0],self.FYMiYao)
@@ -187,6 +219,7 @@ class window(QWidget,Ui_Form):
         self.DCTiMuKuang.setText(f'题目是：{DClib.DCShuJuChuLi(self.DCDangQianTiMu[3])[0]}\n')
         self.DCZhengQueDaAn=self.DCDangQianTiMu[3]
         self.DCGengXinTiMu()
+        self.DCRiQi=QKlib.QKDuQuRiQi(self.DCYuYan.currentText(),'DC')
     
 
     def DCGengXinTiMu(self):
@@ -203,16 +236,19 @@ class window(QWidget,Ui_Form):
             self.DCTiMuKuang.setText('还未加载题库')
         elif self.DCTiMuWeiZhi+1>=len(self.DCTiKuShuJu):
             if self.DCTiMuWeiZhi+1==len(self.DCTiKuShuJu):
+                QKlib.QKBaoCunLuoJi(f'{self.DCZhengQueDaAn}',self.DCRiQi)
                 self.DCTiMuWeiZhi+=1
                 self.DCTiMuKuang.setText('到头了')
                 return
         elif DaAn==DClib.DCShuJuChuLi(self.DCZhengQueDaAn)[1]:
+            QKlib.QKBaoCunLuoJi(f'{self.DCZhengQueDaAn}',self.DCRiQi)
             self.DCTiMuWeiZhi+=1
             self.DCDangQianTiMu=DClib.DCTiMuShuChu(self.DCTiMuWeiZhi,self.DCTiKuShuJu)
             self.DCZhengQueDaAn=self.DCDangQianTiMu[3]
             self.DCTiMuKuang.setText(f'题目是：{DClib.DCShuJuChuLi(self.DCDangQianTiMu[3])[0]}\n')
             self.DCGengXinTiMu()
         else:
+            QKlib.QKBaoCunLuoJi(f'#{self.DCDangQianTiMu[3]}',self.DCRiQi)
             self.DCTiMuKuang.setText(f'{self.DCTiMuKuang.text()}\n正确答案是：{DClib.DCShuJuChuLi(self.DCZhengQueDaAn)[1]}')
 
     def DCShangXiaTi(self,BianHua:int):
@@ -245,12 +281,38 @@ class window(QWidget,Ui_Form):
                 self.DCTiMuKuang.setText(f'题目是：{DClib.DCShuJuChuLi(self.DCDangQianTiMu[3])[0]}\n')
                 self.DCGengXinTiMu() 
     
-                
-        
-        
+    def QKHuiTuSheZhi(self):
 
-    
+        self.start_time = QDateTime.currentDateTime()
+        # 添加数据点，这里的时间是以日为单位，每隔 1 天添加一个点，y 值依次递增
+        for i in range(30):  # 假设有 30 天的数据
+            date = self.start_time.addDays(i)
+            timestamp = date.toMSecsSinceEpoch()
+            self.QKHuiTuDCShuJu.append(timestamp, i)   
+        self.QKHuiTuRongQi.addSeries(self.QKHuiTuDCShuJu)
+        self.QKHuiTuRongQi.addSeries(self.QKHuiTuFYShuJu)
+        self.QKHuiTuRongQi.setTitle("绘图")
+        self.axis_x = QDateTimeAxis()
+        self.axis_x.setFormat("yyyy-MM-dd")  # 设置时间显示格式
+        self.axis_x.setTitleText("日期")
+        self.axis_x.setRange(self.start_time, self.start_time.addDays(9))  # 初始显示 10 天的数据 设置起止
+
+        self.QKHuiTuRongQi.addAxis(self.axis_x, Qt.AlignBottom)
+        self.QKHuiTuDCShuJu.attachAxis(self.axis_x)
+
+
+    def QKQueRenRiQIWenJian(self,YuYan,ZhongLei):
+        if ZhongLei=='FY':
+            if self.FYRiQi!=None:
+                self.FYRiQi.close()
+            self.FYRiQi=QKlib.QKDuQuRiQi(YuYan,ZhongLei)
+        elif ZhongLei=='DC':
+            if self.DCRiQi!=None:
+                self.DCRiQi.close()
+            self.DCRiQi=QKlib.QKDuQuRiQi(YuYan,ZhongLei)        
             
+        
+    
 app=QApplication([])
 mywin=window()
 mywin.show()

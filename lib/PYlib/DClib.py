@@ -1,7 +1,6 @@
 import os
 import random
 
-
 def DCYuanYan():
     shuju=os.listdir('shuju')
     shuju.remove('YinPin')
@@ -28,6 +27,7 @@ def DCTiMuShuChu(WeiZhi,TiKu:list):
         shuju=random.sample(TiKu,3)
     shuju.append(TiKu[WeiZhi])
     return shuju
+
 
 
 
