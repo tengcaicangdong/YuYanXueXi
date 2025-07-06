@@ -273,7 +273,7 @@ border-radius: 10px;</string>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="QKYunYan"/>
+            <widget class="QComboBox" name="QKYuYan"/>
            </item>
           </layout>
          </item>
@@ -373,30 +373,6 @@ border-radius: 10px;</string>
              <layout class="QGridLayout" name="gridLayout_10">
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_9">
-                <item row="2" column="1">
-                 <layout class="QHBoxLayout" name="horizontalLayout_2">
-                  <item>
-                   <widget class="QLabel" name="SZYuYingXianShi">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>100</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>状态显示</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="SZYunYing">
-                    <property name="text">
-                     <string>启动语音开关</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
                 <item row="0" column="1">
                  <layout class="QHBoxLayout" name="horizontalLayout_3">
                   <item>
@@ -424,7 +400,31 @@ border-radius: 10px;</string>
                   </item>
                  </layout>
                 </item>
-                <item row="1" column="1">
+                <item row="3" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QLabel" name="SZYuYingXianShi">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>100</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>状态显示</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="SZYunYing">
+                    <property name="text">
+                     <string>启动语音开关</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="1">
                  <layout class="QVBoxLayout" name="verticalLayout_3">
                   <item>
                    <widget class="QLabel" name="SZaiMoXing">
@@ -451,6 +451,27 @@ border-radius: 10px;</string>
                    <widget class="QPushButton" name="pushButton_4">
                     <property name="text">
                      <string>等待</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="1" column="1">
+                 <layout class="QVBoxLayout" name="verticalLayout">
+                  <item>
+                   <widget class="QLabel" name="SZChuangJianYuYan">
+                    <property name="text">
+                     <string>创建新的语言</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="SZChuangJianYuYanShuRu"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="SZChuangJianYuYanQueDing">
+                    <property name="text">
+                     <string>确定</string>
                     </property>
                    </widget>
                   </item>

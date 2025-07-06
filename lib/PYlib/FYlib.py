@@ -14,14 +14,14 @@ def FYShuJuChuLi(YuanShiShuJu,WeiZhi):
     return TiMu
 
 def AIapi_FYShuJu(FYShuJu,FYTiMu,FYMiYao):
-    url="https://spark-api-open.xf-yun.com/v1/chat/completions"
+    url="https://spark-api-open.xf-yun.com/v2/chat/completions"
     headers={
         "Content-Type": 'application/json',
         'Authorization': f'Bearer {FYMiYaoJieMi(FYMiYao)}'
     }
     
     data={
-        "model": "generalv3.5", # 指定请求的模型
+        "model": "x1", # 指定请求的模型
         "messages": [
             {
                 "role": "user",
@@ -34,30 +34,34 @@ def AIapi_FYShuJu(FYShuJu,FYTiMu,FYMiYao):
     print(FYShuJu)
     res=requests.post(url,headers=headers,json=data)
     res_shuju=json.loads(res.text)
+    print(res.status_code)
 
     return  res_shuju['choices'][0]['message']['content']
     
 
 def AIapi_DuiHua(FYDuiHua,FYMiYao):
-    url='https://spark-api-open.xf-yun.com/v1/chat/completions'
+    url='https://spark-api-open.xf-yun.com/v2/chat/completions'
     headers={
-        "Content-Type": 'application/json',
-        'Authorization': f'Bearer {FYMiYaoJieMi(FYMiYao)}'
+        "Authorization" :f"Bearer {FYMiYao}",
+        "Content-Type": 'application/json'
     }
-    data={
-    "model":"generalv3.5",
-    "messages": [
+    body = {
+        "model": "x1",
+        "user": "user_id",
+        "messages": [
         {
             "role": "user",
-            "content": f"{FYDuiHua}"
+            "content": FYDuiHua
         }
     ],
-    "stream":False
+        "stream": False,
     }
-    res=requests.post(url,headers=headers,json=data)
-    res_shuju=json.loads(res.text)
 
-    return  res_shuju['choices'][0]['message']['content']
+    res=requests.post(url,headers=headers,json=body,stream= True)
+    shuju= json.loads(res.text)
+    print(res.status_code)
+
+    return shuju['choices'][0]['message']['content']
 
 
 
@@ -78,14 +82,5 @@ def FYTiKu(YuYan):
 
 
 if __name__=='__main__':
-    
-    a=FYShuJuDuQu('RiYu','JiLei.txt')
-    b=FYShuJuChuLi(a,0)
-    print(b)
-    c='バント,楽しいって思った,一度もない'
-    d='从没觉得乐队有意思过'
-    e='chZnGPGkWfLKZJBBMomh:AtBBZWHdtYlKoMNkNAsI'
-    AIapi_FYShuJu(d,c,e)
-    print(AIapi_DuiHua('你是谁',e))
-    #YunYanLieBiao()
-    #FYTiKu('RiYu','jiLei')
+    AIapi_DuiHua('nihao','HcrahtUcfiyvtdfmLhni:julQHVYjrzaQyWRSgcYS')
+    pass

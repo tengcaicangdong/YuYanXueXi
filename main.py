@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QApplication,QWidget
 from PySide6.QtCore import QTimer,QDateTime,Qt
-from PySide6.QtCharts import QChart, QChartView,QDateTimeAxis, QLineSeries
+from PySide6.QtCharts import QChart, QChartView,QDateTimeAxis, QLineSeries,QValueAxis
 from PySide6.QtGui import QPainter
 from lib.PYlib import FYlib
 from lib.PYlib import SZlib
@@ -20,11 +20,13 @@ class window(QWidget,Ui_Form):
         self.setupUi(self)
         self.setWindowTitle('语通智学')
         SZlib.SZShuJu()
+        QKlib.quebaoshuju()
 
-
-        self.ChengXunChuShiHua()        
+        
+        self.ChengXunChuShiHua()       
         self.XieChengChi=asyncio.new_event_loop()
         self.XianChengChi=ThreadPoolExecutor(25)
+        self.XianChengChi.submit(QKlib.QKChuShiPianLi)
         self.FYRiQi=None
         self.DCRiQi=None
         self.ZongHeRiQi=None
@@ -71,9 +73,9 @@ class window(QWidget,Ui_Form):
         self.DCQueDing.clicked.connect(lambda: QKlib.QKBaoCunLuoJi(f'{self.DCZhengQueDaAn}',self.DCRiQi))
         self.DCQueDing.clicked.connect(lambda:self.DCShangXiaTi(1))
 
-        self.QKHuiTuDCShuJu=QLineSeries()
-        self.QKHuiTuFYShuJu=QLineSeries()
-        self.QKHuiTuRongQi=QChart()
+
+        self.QKYuYan.addItems(QKlib.QKFanHuiYuYan())
+        self.QKHuiTuRongQi = QChart()
         self.QKHuiTuSheZhi()
         self.QKHuiTuRongQiview = QChartView(self.QKHuiTuRongQi)
         self.QKHuiTuRongQiview.setRenderHint(QPainter.Antialiasing)
@@ -280,33 +282,56 @@ class window(QWidget,Ui_Form):
                 self.DCZhengQueDaAn=self.DCDangQianTiMu[3]
                 self.DCTiMuKuang.setText(f'题目是：{DClib.DCShuJuChuLi(self.DCDangQianTiMu[3])[0]}\n')
                 self.DCGengXinTiMu() 
-    
-    def QKHuiTuSheZhi(self):
 
-        self.start_time = QDateTime.currentDateTime()
-        # 添加数据点，这里的时间是以日为单位，每隔 1 天添加一个点，y 值依次递增
-        for i in range(30):  # 假设有 30 天的数据
-            date = self.start_time.addDays(i)
-            timestamp = date.toMSecsSinceEpoch()
-            self.QKHuiTuDCShuJu.append(timestamp, i)   
+
+
+
+
+    def QKHuiTuSheZhi(self):
+        self.QKHuiTuDCShuJu = QLineSeries()
+        self.QKHuiTuFYShuJu = QLineSeries()
+
+        shijianchuo = QKlib.FanHuiShiJianChuo(self.QKYuYan.currentText())
+        shuju = QKlib.DuiYingShuju(self.QKYuYan.currentText())
+        print(shuju)
+        for ts in shijianchuo:
+            self.QKHuiTuDCShuJu.append(ts, shuju[ts][1])
+            self.QKHuiTuFYShuJu.append(ts, shuju[ts][0])
+
         self.QKHuiTuRongQi.addSeries(self.QKHuiTuDCShuJu)
         self.QKHuiTuRongQi.addSeries(self.QKHuiTuFYShuJu)
-        self.QKHuiTuRongQi.setTitle("绘图")
-        self.axis_x = QDateTimeAxis()
-        self.axis_x.setFormat("yyyy-MM-dd")  # 设置时间显示格式
-        self.axis_x.setTitleText("日期")
-        self.axis_x.setRange(self.start_time, self.start_time.addDays(9))  # 初始显示 10 天的数据 设置起止
 
+        self.QKHuiTuRongQi.setTitle("绘图")
+
+    # x轴
+        self.axis_x = QDateTimeAxis()
+        self.axis_x.setFormat("yyyy-MM-dd")
+        self.axis_x.setTitleText("日期")
+        qishi = QDateTime.fromSecsSinceEpoch(int(shijianchuo[0]))
+        zhongzhi = QDateTime.fromSecsSinceEpoch(int(shijianchuo[-1]))
+        self.axis_x.setRange(qishi, zhongzhi)
         self.QKHuiTuRongQi.addAxis(self.axis_x, Qt.AlignBottom)
+
+    # y轴
+        self.axis_y = QValueAxis()
+        self.axis_y.setTitleText("值")
+        self.axis_y.setRange(0, 10)  
+        self.QKHuiTuRongQi.addAxis(self.axis_y, Qt.AlignLeft)
+
+    # 绑定轴给曲线
         self.QKHuiTuDCShuJu.attachAxis(self.axis_x)
+        self.QKHuiTuDCShuJu.attachAxis(self.axis_y)
+        #self.QKHuiTuFYShuJu.attachAxis(self.axis_x)
+        #self.QKHuiTuFYShuJu.attachAxis(self.axis_y)
+
 
 
     def QKQueRenRiQIWenJian(self,YuYan,ZhongLei):
-        if ZhongLei=='FY':
+        if ZhongLei == 'FY':
             if self.FYRiQi!=None:
                 self.FYRiQi.close()
             self.FYRiQi=QKlib.QKDuQuRiQi(YuYan,ZhongLei)
-        elif ZhongLei=='DC':
+        elif ZhongLei == 'DC':
             if self.DCRiQi!=None:
                 self.DCRiQi.close()
             self.DCRiQi=QKlib.QKDuQuRiQi(YuYan,ZhongLei)        
