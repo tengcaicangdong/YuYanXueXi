@@ -11,6 +11,8 @@ from concurrent.futures import ThreadPoolExecutor
 from playsound import playsound
 import asyncio
 import random
+import datetime
+
 
 
 class window(QWidget,Ui_Form):
@@ -80,6 +82,7 @@ class window(QWidget,Ui_Form):
         self.QKHuiTuRongQiview = QChartView(self.QKHuiTuRongQi)
         self.QKHuiTuRongQiview.setRenderHint(QPainter.Antialiasing)
         self.QKTuiTuBuJu.addWidget(self.QKHuiTuRongQiview)
+        self.QKYuYan.currentTextChanged.connect(lambda :self.QKHuiTuSheZhi(self.QKYuYan.currentText()))
 
 
         self.SZYuYingXianShi.setText(self.YunYin)
@@ -287,43 +290,57 @@ class window(QWidget,Ui_Form):
 
 
 
-    def QKHuiTuSheZhi(self):
+    def QKHuiTuSheZhi(self,YuYan='RiYu',MoShi='Ri'):
         self.QKHuiTuDCShuJu = QLineSeries()
         self.QKHuiTuFYShuJu = QLineSeries()
+        shijianchuo = QKlib.FanHuiShiJianChuo(YuYan)
+        if MoShi=='Ri':  
+            shuju = QKlib.DuiYingShuju(YuYan)
+            self.QKHuiTuRongQi.removeAllSeries()
+            for ts in shijianchuo:
+                ts_ms = QDateTime.fromSecsSinceEpoch(int(ts)).toMSecsSinceEpoch() 
+                self.QKHuiTuDCShuJu.append(ts_ms, shuju[ts][1])
+                self.QKHuiTuFYShuJu.append(ts_ms, shuju[ts][0])
+        elif MoShi=='Zhou':
+            shuju=QKlib.AnZhouHuiTu(YuYan)
+            for ts in shuju:
+                ts_ms = QDateTime.fromSecsSinceEpoch(int(ts)).toMSecsSinceEpoch() 
+                self.QKHuiTuDCShuJu.append(ts_ms, shuju[ts][1])
+                self.QKHuiTuFYShuJu.append(ts_ms, shuju[ts][0])
 
-        shijianchuo = QKlib.FanHuiShiJianChuo(self.QKYuYan.currentText())
-        shuju = QKlib.DuiYingShuju(self.QKYuYan.currentText())
-        print(shuju)
-        for ts in shijianchuo:
-            self.QKHuiTuDCShuJu.append(ts, shuju[ts][1])
-            self.QKHuiTuFYShuJu.append(ts, shuju[ts][0])
+
+
+
+
+        for axis in self.QKHuiTuRongQi.axes():
+            self.QKHuiTuRongQi.removeAxis(axis)
 
         self.QKHuiTuRongQi.addSeries(self.QKHuiTuDCShuJu)
         self.QKHuiTuRongQi.addSeries(self.QKHuiTuFYShuJu)
-
         self.QKHuiTuRongQi.setTitle("绘图")
+         
 
-    # x轴
-        self.axis_x = QDateTimeAxis()
-        self.axis_x.setFormat("yyyy-MM-dd")
-        self.axis_x.setTitleText("日期")
-        qishi = QDateTime.fromSecsSinceEpoch(int(shijianchuo[0]))
-        zhongzhi = QDateTime.fromSecsSinceEpoch(int(shijianchuo[-1]))
-        self.axis_x.setRange(qishi, zhongzhi)
-        self.QKHuiTuRongQi.addAxis(self.axis_x, Qt.AlignBottom)
+        axis_x = QDateTimeAxis()
+        zuixiao = int(min(shijianchuo) * 1000)
+        zuida = int(max(shijianchuo) * 1000)
+        axis_x.setRange(QDateTime.fromMSecsSinceEpoch(zuixiao), QDateTime.fromMSecsSinceEpoch(zuida))
 
-    # y轴
-        self.axis_y = QValueAxis()
-        self.axis_y.setTitleText("值")
-        self.axis_y.setRange(0, 10)  
-        self.QKHuiTuRongQi.addAxis(self.axis_y, Qt.AlignLeft)
+        axis_x.setFormat("yyyy-MM-dd")
+        axis_x.setTitleText("日期")
+        axis_x.setTickCount(min(10, len(shijianchuo)))
+        axis_x.setTitleText("")
+        axis_x.setGridLineVisible(False)
+        axis_x.setLabelsAngle(90)
 
-    # 绑定轴给曲线
-        self.QKHuiTuDCShuJu.attachAxis(self.axis_x)
-        self.QKHuiTuDCShuJu.attachAxis(self.axis_y)
-        #self.QKHuiTuFYShuJu.attachAxis(self.axis_x)
-        #self.QKHuiTuFYShuJu.attachAxis(self.axis_y)
 
+        self.QKHuiTuRongQi.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
+        self.QKHuiTuDCShuJu.attachAxis(axis_x)
+        self.QKHuiTuFYShuJu.attachAxis(axis_x)
+
+        axis_y = QValueAxis()
+        self.QKHuiTuRongQi.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
+        self.QKHuiTuDCShuJu.attachAxis(axis_y)
+        self.QKHuiTuFYShuJu.attachAxis(axis_y)           
 
 
     def QKQueRenRiQIWenJian(self,YuYan,ZhongLei):

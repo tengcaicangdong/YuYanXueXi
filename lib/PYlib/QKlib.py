@@ -1,7 +1,8 @@
 import time
-import datetime
 import os
 import re
+import datetime
+
 def FengGeShuJu(a):
     b=a.split('#')
     return b
@@ -213,8 +214,93 @@ def DuiYingShuju(YuYan):
     del zidian[0.0]
     return zidian        
     
+
+
+def  AnZhouHuiTu(YuYan):
+    shuju=FanHuiShiJianChuo(YuYan)
+    zuixiao=min(shuju)
+    zuida=max(shuju)
+    kongjian=[]
+    
+    while True :
+    # 时间戳 -> 日期
+        current_date = datetime.datetime.fromtimestamp(int(zuixiao)).date()
+        if current_date.weekday() == 0:   # 0 表示星期一
+            break
+        zuixiao += 86400
+    kongjian.append(zuixiao-86400*7)
+
+    while True :
+    # 时间戳 -> 日期
+        current_date = datetime.datetime.fromtimestamp(int(zuida)).date()
+        if current_date.weekday() == 0:   # 0 表示星期一
+            break
+        zuida += 86400
+    
+    while zuixiao != zuida:
+        kongjian.append(zuixiao)
+        zuixiao+=86400*7
+    kongjian.append(zuixiao)
+
+    zidian={}
+    with open(f'shuju\\{YuYan}\\XueXiShuJu.txt' ,mode='r',encoding='utf-8') as f:
+        shuju2=f.readlines()
+        for i in shuju2 :
+            a=i.split('#')
+            zidian[float(a[0])]=[int(a[2]),int(a[3].strip('\n'))]
+    del zidian[0.0]
+
+    shuchuzidian={}
+    for i in kongjian:
+        shuchuzidian[i]=[0,0]
+        for l  in zidian:
+            if  l > i and l <i+86400*7 :
+                shuchuzidian[i][0]+=zidian[l][0]
+                shuchuzidian[i][1]+=zidian[l][1]
+    return shuchuzidian
+
+
+def  AnYueHuiTu(YuYan):
+    shuju=FanHuiShiJianChuo(YuYan)
+    zuixiao=min(shuju)
+    zuida=max(shuju)
+    zidian={}
+    yuebiao=[]
+    shuchuzidian={}
+# [0:4] [5:7]
+    with open(f'shuju\\{YuYan}\\XueXiShuJu.txt' ,mode='r',encoding='utf-8') as f:
+        shuju2=f.readlines()
+        for i in shuju2 :
+            a=i.split('#')
+            zidian[float(a[0])]=[int(a[2]),int(a[3].strip('\n'))]
+    del zidian[0.0]
+
+    for i  in  range(13-int(ZhuanHui(zuixiao)[5:7])):
+        yuebiao.append(datetime.datetime(int(ZhuanHui(zuixiao)[0:4]), int(ZhuanHui(zuixiao)[5:7])+i, 1).timestamp())
+    if ZhuanHui(zuixiao)[0:4]!=ZhuanHui(zuida)[0:4]:
+        for i in range(1,int(ZhuanHui(zuida)[0:4])-int(ZhuanHui(zuixiao)[0:4])+1):
+            for l in range(1,13):
+                yuebiao.append(datetime.datetime(i+int(ZhuanHui(zuixiao)[0:4]), l,1).timestamp())
+    
+    for i in range(len(yuebiao)):
+        if i +1 != len(yuebiao):
+            shuchuzidian[i]=[0,0]
+            for l in zidian:
+                if yuebiao[i] <= l < yuebiao[i+1]:
+                    shuchuzidian[i][0]+=zidian[l][0]
+                    shuchuzidian[i][1]+=zidian[l][1]
+        elif i +1 == len(yuebiao):
+            for l in zidian:
+                if yuebiao[i] <= l :
+                    shuchuzidian[i][0]+=zidian[l][0]
+                    shuchuzidian[i][1]+=zidian[l][1]
+    return shuchuzidian
+
+    
         
+
+    
 
 if __name__=='__main__':
     # KQDuQuFYRiQi('RiYu','DC')
-    DuiYingShuju('RiYu')
+    AnYueHuiTu('RiYu')
