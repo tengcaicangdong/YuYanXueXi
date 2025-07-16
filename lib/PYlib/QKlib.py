@@ -225,7 +225,7 @@ def  AnZhouHuiTu(YuYan):
     while True :
     # 时间戳 -> 日期
         current_date = datetime.datetime.fromtimestamp(int(zuixiao)).date()
-        if current_date.weekday() == 0:   # 0 表示星期一
+        if current_date.weekday() == 0:   
             break
         zuixiao += 86400
     kongjian.append(zuixiao-86400*7)
@@ -233,7 +233,7 @@ def  AnZhouHuiTu(YuYan):
     while True :
     # 时间戳 -> 日期
         current_date = datetime.datetime.fromtimestamp(int(zuida)).date()
-        if current_date.weekday() == 0:   # 0 表示星期一
+        if current_date.weekday() == 0:   
             break
         zuida += 86400
     
@@ -281,19 +281,20 @@ def  AnYueHuiTu(YuYan):
         for i in range(1,int(ZhuanHui(zuida)[0:4])-int(ZhuanHui(zuixiao)[0:4])+1):
             for l in range(1,13):
                 yuebiao.append(datetime.datetime(i+int(ZhuanHui(zuixiao)[0:4]), l,1).timestamp())
-    
+
     for i in range(len(yuebiao)):
         if i +1 != len(yuebiao):
-            shuchuzidian[i]=[0,0]
+            shuchuzidian[yuebiao[i]]=[0,0]
             for l in zidian:
                 if yuebiao[i] <= l < yuebiao[i+1]:
-                    shuchuzidian[i][0]+=zidian[l][0]
-                    shuchuzidian[i][1]+=zidian[l][1]
+                    shuchuzidian[yuebiao[i]][0]+=zidian[l][0]
+                    shuchuzidian[yuebiao[i]][1]+=zidian[l][1]
         elif i +1 == len(yuebiao):
             for l in zidian:
                 if yuebiao[i] <= l :
-                    shuchuzidian[i][0]+=zidian[l][0]
-                    shuchuzidian[i][1]+=zidian[l][1]
+                    shuchuzidian[yuebiao[i]][0]+=zidian[l][0]
+                    shuchuzidian[yuebiao[i]][1]+=zidian[l][1]
+
     return shuchuzidian
 
     

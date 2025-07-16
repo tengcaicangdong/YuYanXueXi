@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QApplication,QWidget
 from PySide6.QtCore import QTimer,QDateTime,Qt
-from PySide6.QtCharts import QChart, QChartView,QDateTimeAxis, QLineSeries,QValueAxis
-from PySide6.QtGui import QPainter
+from PySide6.QtCharts import QChart, QChartView,QDateTimeAxis, QLineSeries,QValueAxis,QCategoryAxis
+from PySide6.QtGui import QPixmap, QPainter
 from lib.PYlib import FYlib
 from lib.PYlib import SZlib
 from lib.PYlib import QKlib
@@ -11,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from playsound import playsound
 import asyncio
 import random
-import datetime
+import time
 
 
 
@@ -76,6 +76,7 @@ class window(QWidget,Ui_Form):
         self.DCQueDing.clicked.connect(lambda:self.DCShangXiaTi(1))
 
 
+
         self.QKYuYan.addItems(QKlib.QKFanHuiYuYan())
         self.QKHuiTuRongQi = QChart()
         self.QKHuiTuSheZhi()
@@ -83,6 +84,10 @@ class window(QWidget,Ui_Form):
         self.QKHuiTuRongQiview.setRenderHint(QPainter.Antialiasing)
         self.QKTuiTuBuJu.addWidget(self.QKHuiTuRongQiview)
         self.QKYuYan.currentTextChanged.connect(lambda :self.QKHuiTuSheZhi(self.QKYuYan.currentText()))
+        self.QKYueHuiTu.clicked.connect(lambda:self.QKHuiTuSheZhi(self.QKYuYan.currentText(),'Yue'))
+        self.QKTianHuiTu.clicked.connect(lambda:self.QKHuiTuSheZhi(self.QKYuYan.currentText(),'Ri'))
+        self.QKZhouHuiTu.clicked.connect(lambda:self.QKHuiTuSheZhi(self.QKYuYan.currentText(),'Zhou'))
+        self.QKDaoChu.clicked.connect(lambda:self.BaoCunHuiTu(True))
 
 
         self.SZYuYingXianShi.setText(self.YunYin)
@@ -288,60 +293,76 @@ class window(QWidget,Ui_Form):
 
 
 
-
-
-    def QKHuiTuSheZhi(self,YuYan='RiYu',MoShi='Ri'):
+    def QKHuiTuSheZhi(self, YuYan='RiYu', MoShi='Ri'):
         self.QKHuiTuDCShuJu = QLineSeries()
         self.QKHuiTuFYShuJu = QLineSeries()
-        shijianchuo = QKlib.FanHuiShiJianChuo(YuYan)
-        if MoShi=='Ri':  
+
+        axis_x = QCategoryAxis()
+        axis_x.setLabelsPosition(QCategoryAxis.AxisLabelsPositionOnValue)
+        axis_x.setLabelsAngle(90)
+
+        self.QKHuiTuRongQi.removeAllSeries()
+
+        if MoShi == 'Ri':
+            shijianchuo = sorted(QKlib.FanHuiShiJianChuo(YuYan))
             shuju = QKlib.DuiYingShuju(YuYan)
-            self.QKHuiTuRongQi.removeAllSeries()
-            for ts in shijianchuo:
-                ts_ms = QDateTime.fromSecsSinceEpoch(int(ts)).toMSecsSinceEpoch() 
-                self.QKHuiTuDCShuJu.append(ts_ms, shuju[ts][1])
-                self.QKHuiTuFYShuJu.append(ts_ms, shuju[ts][0])
-        elif MoShi=='Zhou':
-            shuju=QKlib.AnZhouHuiTu(YuYan)
-            for ts in shuju:
-                ts_ms = QDateTime.fromSecsSinceEpoch(int(ts)).toMSecsSinceEpoch() 
-                self.QKHuiTuDCShuJu.append(ts_ms, shuju[ts][1])
-                self.QKHuiTuFYShuJu.append(ts_ms, shuju[ts][0])
+
+            for i, ts in enumerate(shijianchuo):
+                dt = QDateTime.fromSecsSinceEpoch(int(ts))
+                label = dt.toString("yyyy-MM-dd")
+                axis_x.append(label, i)  # x轴使用整数i作为坐标
+                self.QKHuiTuDCShuJu.append(i, shuju[ts][1])
+                self.QKHuiTuFYShuJu.append(i, shuju[ts][0])
+
+        elif MoShi == 'Zhou':
+            shuju = QKlib.AnZhouHuiTu(YuYan)
+            shijianchuo = sorted(shuju.keys())
+
+            for i, ts in enumerate(shijianchuo):
+                dt = QDateTime.fromSecsSinceEpoch(int(ts))
+                label = dt.toString("yyyy-MM-dd")
+                axis_x.append(label, i)
+                self.QKHuiTuDCShuJu.append(i, shuju[ts][1])
+                self.QKHuiTuFYShuJu.append(i, shuju[ts][0])
+        elif MoShi == 'Yue':
+            shuju = QKlib.AnYueHuiTu(YuYan)
+            shijianchuo = sorted(shuju.keys())
+            for i, ts in enumerate(shijianchuo):
+                dt = QDateTime.fromSecsSinceEpoch(int(ts))
+                label = dt.toString("yyyy-MM-dd")
+                axis_x.append(label, i)
+                self.QKHuiTuDCShuJu.append(i, shuju[ts][1])
+                self.QKHuiTuFYShuJu.append(i, shuju[ts][0])
 
 
-
-
-
+        # 清除旧坐标轴
         for axis in self.QKHuiTuRongQi.axes():
             self.QKHuiTuRongQi.removeAxis(axis)
 
+        # 添加线条
         self.QKHuiTuRongQi.addSeries(self.QKHuiTuDCShuJu)
         self.QKHuiTuRongQi.addSeries(self.QKHuiTuFYShuJu)
         self.QKHuiTuRongQi.setTitle("绘图")
-         
 
-        axis_x = QDateTimeAxis()
-        zuixiao = int(min(shijianchuo) * 1000)
-        zuida = int(max(shijianchuo) * 1000)
-        axis_x.setRange(QDateTime.fromMSecsSinceEpoch(zuixiao), QDateTime.fromMSecsSinceEpoch(zuida))
-
-        axis_x.setFormat("yyyy-MM-dd")
-        axis_x.setTitleText("日期")
-        axis_x.setTickCount(min(10, len(shijianchuo)))
-        axis_x.setTitleText("")
-        axis_x.setGridLineVisible(False)
-        axis_x.setLabelsAngle(90)
-
-
+        # 添加 X 轴
         self.QKHuiTuRongQi.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
         self.QKHuiTuDCShuJu.attachAxis(axis_x)
         self.QKHuiTuFYShuJu.attachAxis(axis_x)
 
+        # 添加 Y 轴
         axis_y = QValueAxis()
         self.QKHuiTuRongQi.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
         self.QKHuiTuDCShuJu.attachAxis(axis_y)
-        self.QKHuiTuFYShuJu.attachAxis(axis_y)           
+        self.QKHuiTuFYShuJu.attachAxis(axis_y)
 
+    def BaoCunHuiTu(self, DaoChu=False):
+        if DaoChu:
+            pixmap = self.QKHuiTuRongQiview.grab()
+            ts = time.time()  
+            dt = QDateTime.fromSecsSinceEpoch(int(ts))
+            time_str = dt.toString("yyyy-MM-dd_HH-mm-ss")  
+            filename = f"TuPian\\{time_str}.png"
+            pixmap.save(filename)   
 
     def QKQueRenRiQIWenJian(self,YuYan,ZhongLei):
         if ZhongLei == 'FY':
@@ -351,9 +372,8 @@ class window(QWidget,Ui_Form):
         elif ZhongLei == 'DC':
             if self.DCRiQi!=None:
                 self.DCRiQi.close()
-            self.DCRiQi=QKlib.QKDuQuRiQi(YuYan,ZhongLei)        
+            self.DCRiQi=QKlib.QKDuQuRiQi(YuYan,ZhongLei)    
             
-        
     
 app=QApplication([])
 mywin=window()

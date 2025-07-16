@@ -243,7 +243,7 @@ border-radius: 10px;</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_8">
          <item row="3" column="0">
-          <widget class="QPushButton" name="KQDaoChu">
+          <widget class="QPushButton" name="QKDaoChu">
            <property name="text">
             <string>导出</string>
            </property>
@@ -252,21 +252,21 @@ border-radius: 10px;</string>
          <item row="2" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
-            <widget class="QPushButton" name="KQTianHuiTu">
+            <widget class="QPushButton" name="QKTianHuiTu">
              <property name="text">
               <string>按天绘图</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="KQZhouHuiTu">
+            <widget class="QPushButton" name="QKZhouHuiTu">
              <property name="text">
               <string>按周绘图</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="KQYueHuiTu">
+            <widget class="QPushButton" name="QKYueHuiTu">
              <property name="text">
               <string>按月绘图</string>
              </property>
