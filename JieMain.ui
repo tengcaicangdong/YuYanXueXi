@@ -110,6 +110,13 @@ border-radius: 10px;</string>
          <item row="3" column="4">
           <widget class="QLineEdit" name="FYaiShuRu"/>
          </item>
+         <item row="2" column="4">
+          <widget class="QCheckBox" name="FYAIQiDong">
+           <property name="text">
+            <string>是否启用</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="DanCiJM">
@@ -335,25 +342,34 @@ border-radius: 10px;</string>
               </widget>
              </item>
              <item>
-              <layout class="QFormLayout" name="formLayout">
-               <item row="0" column="0">
-                <widget class="QComboBox" name="SJYuYan"/>
-               </item>
-               <item row="1" column="0" colspan="2">
-                <widget class="QPushButton" name="SJBaoCun">
-                 <property name="text">
-                  <string>保存</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QPushButton" name="SJWenJian">
-                 <property name="text">
-                  <string>文件选择</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="QComboBox" name="SJYuYan">
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="SJZhongLei"/>
+             </item>
+             <item>
+              <widget class="QComboBox" name="SJWenJian"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="SJQueDing">
+               <property name="text">
+                <string>确定</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="SJBaoCun">
+               <property name="text">
+                <string>保存</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

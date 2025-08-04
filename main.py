@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QApplication,QWidget
+from PySide6.QtWidgets import QApplication,QWidget,QTableWidgetItem
 from PySide6.QtCore import QTimer,QDateTime,Qt
 from PySide6.QtCharts import QChart, QChartView,QDateTimeAxis, QLineSeries,QValueAxis,QCategoryAxis
 from PySide6.QtGui import QPixmap, QPainter
@@ -6,6 +6,7 @@ from lib.PYlib import FYlib
 from lib.PYlib import SZlib
 from lib.PYlib import QKlib
 from lib.PYlib import DClib
+from lib.PYlib import SJlib
 from JieMainui import Ui_Form
 from concurrent.futures import ThreadPoolExecutor
 from playsound import playsound
@@ -29,6 +30,7 @@ class window(QWidget,Ui_Form):
         self.XieChengChi=asyncio.new_event_loop()
         self.XianChengChi=ThreadPoolExecutor(25)
         self.XianChengChi.submit(QKlib.QKChuShiPianLi)
+        self.XianChengChi.submit(self.QueBaoHuiTuRiQi)
         self.FYRiQi=None
         self.DCRiQi=None
         self.ZongHeRiQi=None
@@ -37,6 +39,7 @@ class window(QWidget,Ui_Form):
         self.FYTiKuWenJianLiBiao=None
         self.FYaiFanHui=None
         self.FYaiFanHui_DH=None
+        self.FYaiKaiGuan=False
         self.FYWeiZhiBianHua=0
         self.FYTiMuWeiZhi=0
 
@@ -60,6 +63,7 @@ class window(QWidget,Ui_Form):
         self.FYaiQueRen.clicked.connect(self.FYaiDuiHua_DH)
         self.FYaiJiShiQi_DH.timeout.connect(self.FYaiFanHuiJianCe_DH)
         self.FYaiQingKong.clicked.connect(lambda:self.FYaiDuiHuaKuang.setText(' '))
+        self.FYAIQiDong.clicked.connect(self.FYaiXuanZe)
 
 
         self.DCYuYan.addItems(DClib.DCYuanYan())
@@ -79,7 +83,7 @@ class window(QWidget,Ui_Form):
 
         self.QKYuYan.addItems(QKlib.QKFanHuiYuYan())
         self.QKHuiTuRongQi = QChart()
-        self.QKHuiTuSheZhi()
+        #self.QKHuiTuSheZhi()
         self.QKHuiTuRongQiview = QChartView(self.QKHuiTuRongQi)
         self.QKHuiTuRongQiview.setRenderHint(QPainter.Antialiasing)
         self.QKTuiTuBuJu.addWidget(self.QKHuiTuRongQiview)
@@ -89,14 +93,23 @@ class window(QWidget,Ui_Form):
         self.QKZhouHuiTu.clicked.connect(lambda:self.QKHuiTuSheZhi(self.QKYuYan.currentText(),'Zhou'))
         self.QKDaoChu.clicked.connect(lambda:self.BaoCunHuiTu(True))
 
-
+        self.SJDangQianLuJin=None
+        self.SJYuYan.addItems(SJlib.SJYuYanList())
+        self.SJZhongLei.addItems(['DanCi','FanYi'])
+        self.SJWenJian.addItems(SJlib.SJWenJianList(self.SJYuYan.currentText(),self.SJZhongLei.currentText()))
+        self.SJYuYan.currentIndexChanged.connect(lambda :self.SJGengHuan())
+        self.SJZhongLei.currentIndexChanged.connect(lambda :self.SJGengHuan())
+        self.SJBiao.setColumnCount(2)
+        self.SJBiao.setHorizontalHeaderLabels(["题目",'答案'])
+        self.SJQueDing.clicked.connect(lambda :self.SJJiaZaiShuJu(SJlib.SJShuChuShuJu(f'shuju\\{self.SJYuYan.currentText()}\\{self.SJZhongLei.currentText()}\\{self.SJWenJian.currentText()}')))
+        self.SJBaoCun.clicked.connect(self.SJBaoCunShuJu)
         self.SZYuYingXianShi.setText(self.YunYin)
         self.SZaiMoXingBaoCun.clicked.connect(self.SZaiMoXingMiYao)
         
         if self.YunYin=='True\n': 
             playsound('shuju\\YinPin\\ciallo.mp3')
 
-
+        
         self.SZYunYing.clicked.connect(lambda: self.SZJMYuYin(SZlib.SZGengGaiYuYin))
 
     def kong():
@@ -112,8 +125,7 @@ class window(QWidget,Ui_Form):
         self.FYTiKuWenJianLiBiao = FYlib.FYShuJuDuQu(self.FYYuYan.currentText(),self.FYTiKu.currentText())
         FYTiMu=FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)
         self.FYXianShi.setText(f'翻译题目为：{FYTiMu[0]}')
-        print(self.FYTiMuWeiZhi)
-        print(FYTiMu)
+
 
 
     def FYTiMuShangXia(self,WeiZhiBianDong):
@@ -169,6 +181,8 @@ class window(QWidget,Ui_Form):
 
 
     def FYaiDuiHuaKuangluojiFaSong(self):
+        if self.FYaiKaiGuan==False: 
+            return
         fa_song=lambda : FYlib.AIapi_FYShuJu(self.FYShuRu.text(),FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)[0],self.FYMiYao)
         self.FYaiFanHui=self.XianChengChi.submit(fa_song)
         self.FYaiJiShiQi.setInterval(1000)
@@ -180,6 +194,8 @@ class window(QWidget,Ui_Form):
             self.FYaiJiShiQi.stop()
 
     def FYaiDuiHua_DH(self):
+        if self.FYaiKaiGuan==False:
+            return
         fa_song=lambda : FYlib.AIapi_DuiHua(self.FYaiShuRu.text(),self.FYMiYao)
         self.FYaiFanHui_DH=self.XianChengChi.submit(fa_song)
         print(type(self.FYaiFanHui_DH))
@@ -190,6 +206,12 @@ class window(QWidget,Ui_Form):
         if self.FYaiFanHui_DH._result!=None:
             self.FYaiDuiHuaKuang.setText(self.FYaiDuiHuaKuang.toPlainText()+'\n'+self.FYaiFanHui_DH._result)
             self.FYaiJiShiQi_DH.stop()
+
+    def FYaiXuanZe(self):
+        if self.FYaiKaiGuan :
+            self.FYaiKaiGuan = False
+        else:
+            self.FYaiKaiGuan = True
 
 
     def SZJMYuYin(self,ZX=kong):
@@ -375,6 +397,44 @@ class window(QWidget,Ui_Form):
             self.DCRiQi=QKlib.QKDuQuRiQi(YuYan,ZhongLei)    
             
     
+    def SJGengHuan(self):
+        self.SJWenJian.clear()
+        self.SJWenJian.addItems(SJlib.SJWenJianList(self.SJYuYan.currentText(),self.SJZhongLei.currentText()))
+
+    
+    def SJJiaZaiShuJu(self,data):
+        self.SJDangQianLuJin=f'shuju\\{self.SJYuYan.currentText()}\\{self.SJZhongLei.currentText()}\\{self.SJWenJian.currentText()}'
+        self.SJBiao.setRowCount(len(data))
+        for row, row_data in enumerate(data):
+            for col, key in enumerate(["题目","答案"]):
+                item = QTableWidgetItem(str(row_data[key]))
+                self.SJBiao.setItem(row, col, item)
+
+    def SJBaoCunShuJu(self):
+        if self.SJDangQianLuJin==None:
+            return
+        shuju=[]
+        for i in range(self.SJBiao.rowCount()):
+            tianjia=[]
+            for l in range(self.SJBiao.columnCount()):
+                tianjia.append(self.SJBiao.item(i, l).text())
+            shuju.append(tianjia)
+        SJlib.SJXieRuBenDiWenJian(self.SJDangQianLuJin,shuju)
+
+
+
+
+
+
+
+
+    def QueBaoHuiTuRiQi(self):
+        for i in QKlib.QKFanHuiYuYan():
+                QKlib.QKZhongHeRiQi(i)
+
+
+
+
 app=QApplication([])
 mywin=window()
 mywin.show()

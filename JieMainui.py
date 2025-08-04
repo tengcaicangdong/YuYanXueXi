@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGridLayout,
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QGridLayout,
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QPushButton, QSizePolicy, QTabWidget, QTableWidget,
     QTableWidgetItem, QTextEdit, QVBoxLayout, QWidget)
@@ -99,6 +99,11 @@ class Ui_Form(object):
         self.FYaiShuRu.setObjectName(u"FYaiShuRu")
 
         self.gridLayout_4.addWidget(self.FYaiShuRu, 3, 4, 1, 1)
+
+        self.FYAIQiDong = QCheckBox(self.FanYiJM)
+        self.FYAIQiDong.setObjectName(u"FYAIQiDong")
+
+        self.gridLayout_4.addWidget(self.FYAIQiDong, 2, 4, 1, 1)
 
         self.tabWidget.addTab(self.FanYiJM, "")
         self.DanCiJM = QWidget()
@@ -269,25 +274,31 @@ class Ui_Form(object):
 
         self.verticalLayout_5.addWidget(self.SJBiao)
 
-        self.formLayout = QFormLayout()
-        self.formLayout.setObjectName(u"formLayout")
         self.SJYuYan = QComboBox(self.ShuJuSheZhiJM)
         self.SJYuYan.setObjectName(u"SJYuYan")
+        self.SJYuYan.setMinimumSize(QSize(200, 0))
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.SJYuYan)
+        self.verticalLayout_5.addWidget(self.SJYuYan)
+
+        self.SJZhongLei = QComboBox(self.ShuJuSheZhiJM)
+        self.SJZhongLei.setObjectName(u"SJZhongLei")
+
+        self.verticalLayout_5.addWidget(self.SJZhongLei)
+
+        self.SJWenJian = QComboBox(self.ShuJuSheZhiJM)
+        self.SJWenJian.setObjectName(u"SJWenJian")
+
+        self.verticalLayout_5.addWidget(self.SJWenJian)
+
+        self.SJQueDing = QPushButton(self.ShuJuSheZhiJM)
+        self.SJQueDing.setObjectName(u"SJQueDing")
+
+        self.verticalLayout_5.addWidget(self.SJQueDing)
 
         self.SJBaoCun = QPushButton(self.ShuJuSheZhiJM)
         self.SJBaoCun.setObjectName(u"SJBaoCun")
 
-        self.formLayout.setWidget(1, QFormLayout.SpanningRole, self.SJBaoCun)
-
-        self.SJWenJian = QPushButton(self.ShuJuSheZhiJM)
-        self.SJWenJian.setObjectName(u"SJWenJian")
-
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.SJWenJian)
-
-
-        self.verticalLayout_5.addLayout(self.formLayout)
+        self.verticalLayout_5.addWidget(self.SJBaoCun)
 
 
         self.gridLayout_5.addLayout(self.verticalLayout_5, 0, 0, 1, 1)
@@ -424,6 +435,7 @@ class Ui_Form(object):
         self.FYaiQueRen.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4", None))
         self.FYKaiShi.setText(QCoreApplication.translate("Form", u"\u786e\u8ba4\u9898\u5e93", None))
         self.FYaiQingKong.setText(QCoreApplication.translate("Form", u"\u6e05\u7a7a", None))
+        self.FYAIQiDong.setText(QCoreApplication.translate("Form", u"\u662f\u5426\u542f\u7528", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.FanYiJM), QCoreApplication.translate("Form", u"\u7ffb\u8bd1", None))
         self.DCTiMuKuang.setText(QCoreApplication.translate("Form", u"\u7b49\u5f85\u4e2d", None))
         self.DCQueDingTiKu.setText(QCoreApplication.translate("Form", u"\u786e\u5b9a\u9898\u5e93", None))
@@ -453,8 +465,8 @@ class Ui_Form(object):
         ___qtablewidgetitem2.setText(QCoreApplication.translate("Form", u"\u65b0\u5efa\u5217", None));
         ___qtablewidgetitem3 = self.SJBiao.horizontalHeaderItem(3)
         ___qtablewidgetitem3.setText(QCoreApplication.translate("Form", u"\u65b0\u5efa\u5217", None));
+        self.SJQueDing.setText(QCoreApplication.translate("Form", u"\u786e\u5b9a", None))
         self.SJBaoCun.setText(QCoreApplication.translate("Form", u"\u4fdd\u5b58", None))
-        self.SJWenJian.setText(QCoreApplication.translate("Form", u"\u6587\u4ef6\u9009\u62e9", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ShuJuSheZhiJM), QCoreApplication.translate("Form", u"\u6570\u636e\u8bbe\u7f6e", None))
         self.SZWenJianZhuangTai.setText(QCoreApplication.translate("Form", u"\u9009\u62e9\u7684\u6587\u4ef6", None))
         self.SZXuanZeWenJian.setText(QCoreApplication.translate("Form", u"\u9009\u62e9\u6587\u4ef6", None))

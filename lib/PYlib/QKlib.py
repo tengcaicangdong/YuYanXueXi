@@ -120,7 +120,6 @@ def QKZhongHeRiQi(YuYan): #保存前一天数据
     RiQi=open(f'shuju\\{YuYan}\\XueXiShuJu.txt',mode='r+',encoding='utf-8')
     shuju=RiQi.readlines()
     jintian=RiQiJinTian()
-
     zuihouRiQi=float(FengGeShuJu(shuju[-1])[0])
 
     if zuihouRiQi + 86400 == jintian :
@@ -165,10 +164,10 @@ def QKZhongHeRiQi(YuYan): #保存前一天数据
             shujuzidian[i].append(0)
 
     for i in shujuzidian:
-        RiQi.write(f'{i}#{ZhuanHui(i)}#{shujuzidian[i][0]}#{shujuzidian[i][1]}\n')        
+        RiQi.write(f'{i}#{ZhuanHui(i)}#{shujuzidian[i][0]}#{shujuzidian[i][1]}\n')
+        RiQi.flush()        
 
  #时间戳#日期#翻译数#单词数
-
     RiQi.close()
 
 
@@ -304,4 +303,4 @@ def  AnYueHuiTu(YuYan):
 
 if __name__=='__main__':
     # KQDuQuFYRiQi('RiYu','DC')
-    AnYueHuiTu('RiYu')
+    QKZhongHeRiQi('RiYu')
