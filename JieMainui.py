@@ -295,6 +295,11 @@ class Ui_Form(object):
 
         self.verticalLayout_5.addWidget(self.SJQueDing)
 
+        self.SJShanChuAnNiu = QPushButton(self.ShuJuSheZhiJM)
+        self.SJShanChuAnNiu.setObjectName(u"SJShanChuAnNiu")
+
+        self.verticalLayout_5.addWidget(self.SJShanChuAnNiu)
+
         self.SJBaoCun = QPushButton(self.ShuJuSheZhiJM)
         self.SJBaoCun.setObjectName(u"SJBaoCun")
 
@@ -332,10 +337,20 @@ class Ui_Form(object):
 
         self.horizontalLayout_3.addWidget(self.SZXuanZeWenJian)
 
-        self.SZYunYan = QComboBox(self.widget)
-        self.SZYunYan.setObjectName(u"SZYunYan")
+        self.SJKaiFenGeAnNiu = QPushButton(self.widget)
+        self.SJKaiFenGeAnNiu.setObjectName(u"SJKaiFenGeAnNiu")
 
-        self.horizontalLayout_3.addWidget(self.SZYunYan)
+        self.horizontalLayout_3.addWidget(self.SJKaiFenGeAnNiu)
+
+        self.SZFenGeYuYan = QComboBox(self.widget)
+        self.SZFenGeYuYan.setObjectName(u"SZFenGeYuYan")
+
+        self.horizontalLayout_3.addWidget(self.SZFenGeYuYan)
+
+        self.SZFenGeZhongLei = QComboBox(self.widget)
+        self.SZFenGeZhongLei.setObjectName(u"SZFenGeZhongLei")
+
+        self.horizontalLayout_3.addWidget(self.SZFenGeZhongLei)
 
 
         self.gridLayout_9.addLayout(self.horizontalLayout_3, 0, 1, 1, 1)
@@ -466,10 +481,12 @@ class Ui_Form(object):
         ___qtablewidgetitem3 = self.SJBiao.horizontalHeaderItem(3)
         ___qtablewidgetitem3.setText(QCoreApplication.translate("Form", u"\u65b0\u5efa\u5217", None));
         self.SJQueDing.setText(QCoreApplication.translate("Form", u"\u786e\u5b9a", None))
+        self.SJShanChuAnNiu.setText(QCoreApplication.translate("Form", u"\u5220\u9664", None))
         self.SJBaoCun.setText(QCoreApplication.translate("Form", u"\u4fdd\u5b58", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ShuJuSheZhiJM), QCoreApplication.translate("Form", u"\u6570\u636e\u8bbe\u7f6e", None))
-        self.SZWenJianZhuangTai.setText(QCoreApplication.translate("Form", u"\u9009\u62e9\u7684\u6587\u4ef6", None))
+        self.SZWenJianZhuangTai.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>\u9009\u62e9\u7684txt\u6587\u4ef6___\u4fdd\u5b58\u7684\u5730\u65b9      </p><p>\u72b6\u6001\uff1a\u7b49\u5f85\u4e2d</p></body></html>", None))
         self.SZXuanZeWenJian.setText(QCoreApplication.translate("Form", u"\u9009\u62e9\u6587\u4ef6", None))
+        self.SJKaiFenGeAnNiu.setText(QCoreApplication.translate("Form", u"\u5f00\u59cb", None))
         self.SZYuYingXianShi.setText(QCoreApplication.translate("Form", u"\u72b6\u6001\u663e\u793a", None))
         self.SZYunYing.setText(QCoreApplication.translate("Form", u"\u542f\u52a8\u8bed\u97f3\u5f00\u5173", None))
         self.SZaiMoXing.setText(QCoreApplication.translate("Form", u"\u72b6\u6001\u663e\u793a", None))

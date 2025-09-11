@@ -365,6 +365,13 @@ border-radius: 10px;</string>
               </widget>
              </item>
              <item>
+              <widget class="QPushButton" name="SJShanChuAnNiu">
+               <property name="text">
+                <string>删除</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="SJBaoCun">
                <property name="text">
                 <string>保存</string>
@@ -400,7 +407,7 @@ border-radius: 10px;</string>
                      </size>
                     </property>
                     <property name="text">
-                     <string>选择的文件</string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;选择的txt文件___保存的地方      &lt;/p&gt;&lt;p&gt;状态：等待中&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                    </widget>
                   </item>
@@ -412,7 +419,17 @@ border-radius: 10px;</string>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="SZYunYan"/>
+                   <widget class="QPushButton" name="SJKaiFenGeAnNiu">
+                    <property name="text">
+                     <string>开始</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="SZFenGeYuYan"/>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="SZFenGeZhongLei"/>
                   </item>
                  </layout>
                 </item>

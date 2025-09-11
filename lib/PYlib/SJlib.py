@@ -1,5 +1,5 @@
 import os
-
+from pathlib import Path
 def SJYuYanList():
     shuju=os.listdir('shuju')    
     shuju.remove('she_zhi.txt')
@@ -24,6 +24,18 @@ def SJXieRuBenDiWenJian(LuJin,shuju_list):
     with open(LuJin,mode='w',encoding='utf-8') as f:
         for  i in shuju_list:
             f.write(f"{i[0]}#{i[1]}\n")
+
+def SJShanChu(lujin,wenjian):
+    wenjian_liebiao=os.listdir(lujin)
+    if len(wenjian_liebiao) == 1:
+        shanchuwenjian=Path(lujin+'\\' + wenjian)
+        shanchuwenjian.unlink()
+        with open(lujin+'\\' + wenjian,mode='w',encoding='utf-8')  as f:
+            f.write('什么也没有#什么也没有')
+    else :
+        shanchuwenjian=Path(lujin+'\\' + wenjian)
+        shanchuwenjian.unlink()
+
 
 
 

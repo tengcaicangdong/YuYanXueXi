@@ -1,7 +1,7 @@
 import subprocess
 
 # 定义要安装的模块列表
-modules_to_install = ["requests", "pyside6", "playsound"]
+modules_to_install = ["requests", "pyside6", "playsound",'sentencex','argostranslate']
 
 # 构造安装命令，将每个模块名称作为单独的参数
 install_command = ["pip", "install"] + modules_to_install

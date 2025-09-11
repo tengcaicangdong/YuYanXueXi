@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QApplication,QWidget,QTableWidgetItem
+from PySide6.QtWidgets import QApplication,QWidget,QTableWidgetItem,QFileDialog,    QMessageBox
 from PySide6.QtCore import QTimer,QDateTime,Qt
 from PySide6.QtCharts import QChart, QChartView,QDateTimeAxis, QLineSeries,QValueAxis,QCategoryAxis
 from PySide6.QtGui import QPixmap, QPainter
@@ -13,6 +13,8 @@ from playsound import playsound
 import asyncio
 import random
 import time
+import re
+import os
 
 
 
@@ -76,14 +78,13 @@ class window(QWidget,Ui_Form):
         self.DCD.clicked.connect(lambda:self.DCTiMuDaAnQueDing(self.DCd.text()))
         self.DCShangYiTi.clicked.connect(lambda:self.DCShangXiaTi(-1))
         self.DCXiaYiTi.clicked.connect(lambda:self.DCShangXiaTi(1))
-        self.DCQueDing.clicked.connect(lambda: QKlib.QKBaoCunLuoJi(f'{self.DCZhengQueDaAn}',self.DCRiQi))
+        self.DCQueDing.clicked.connect(self.DCTiMuQueRenLuoJi)
         self.DCQueDing.clicked.connect(lambda:self.DCShangXiaTi(1))
 
 
 
         self.QKYuYan.addItems(QKlib.QKFanHuiYuYan())
         self.QKHuiTuRongQi = QChart()
-        #self.QKHuiTuSheZhi()
         self.QKHuiTuRongQiview = QChartView(self.QKHuiTuRongQi)
         self.QKHuiTuRongQiview.setRenderHint(QPainter.Antialiasing)
         self.QKTuiTuBuJu.addWidget(self.QKHuiTuRongQiview)
@@ -103,8 +104,16 @@ class window(QWidget,Ui_Form):
         self.SJBiao.setHorizontalHeaderLabels(["题目",'答案'])
         self.SJQueDing.clicked.connect(lambda :self.SJJiaZaiShuJu(SJlib.SJShuChuShuJu(f'shuju\\{self.SJYuYan.currentText()}\\{self.SJZhongLei.currentText()}\\{self.SJWenJian.currentText()}')))
         self.SJBaoCun.clicked.connect(self.SJBaoCunShuJu)
+        self.SJShanChuAnNiu.clicked.connect(self.SJShanChu_LuoJi)
+
+
+        self.SZWenJianLuJin=None
+        self.SZChuangJianYuYanQueDing.clicked.connect(lambda :SZlib.SZChuangJianYuYan(self.SZChuangJianYuYanShuRu.text()))
         self.SZYuYingXianShi.setText(self.YunYin)
         self.SZaiMoXingBaoCun.clicked.connect(self.SZaiMoXingMiYao)
+        self.SZFenGeYuYan.addItems( SZlib.SZHuoQuYuYan())
+        self.SZFenGeZhongLei.addItems(['FanYi','DanCi'])
+        self.SZXuanZeWenJian.clicked.connect(self.SZBaoCunXuanZeWenBen)
         
         if self.YunYin=='True\n': 
             playsound('shuju\\YinPin\\ciallo.mp3')
@@ -176,6 +185,11 @@ class window(QWidget,Ui_Form):
                 
             
     def FYShuruKuangLuoJi(self):
+        if self.FYTiKuWenJianLiBiao==None:
+            return
+        if self.FYXianShi.text()== '请下一题'  or  self.FYXianShi.text()=='已经是最后一题了':
+            return
+        
         self.FYXianShi.setText(self.FYXianShi.text()+'\n'+'你的答案是：'+self.FYShuRu.text()+f'\n{'参考答案是：'+FYlib.FYShuJuChuLi(self.FYTiKuWenJianLiBiao,self.FYTiMuWeiZhi)[1]}')
         self.FYaiDuiHuaKuangluojiFaSong()
 
@@ -238,6 +252,13 @@ class window(QWidget,Ui_Form):
             self.YunYin=DuQu[0]
             self.FYMiYao=None
     
+
+
+    def DCTiMuQueRenLuoJi(self):
+        if self.DCTiKuShuJu==None:
+            return
+        QKlib.QKBaoCunLuoJi(f'{self.DCZhengQueDaAn}',self.DCRiQi)
+
 
     def DCTiKuGengXin(self):
         self.DCTiKu.clear()
@@ -421,11 +442,23 @@ class window(QWidget,Ui_Form):
             shuju.append(tianjia)
         SJlib.SJXieRuBenDiWenJian(self.SJDangQianLuJin,shuju)
 
+    def SJShanChu_LuoJi(self):
+        fanhui=QMessageBox.information(self,'删除','你确定要删除吗？',QMessageBox.StandardButton.Ok|QMessageBox.StandardButton.No,QMessageBox.StandardButton.No)
+        if fanhui==QMessageBox.StandardButton.Ok :
+            SJlib.SJShanChu(f'shuju\\{self.SJYuYan.currentText()}\\{self.SJZhongLei.currentText()}',self.SJWenJian.currentText())
+            self.SJGengHuan()
+        elif fanhui == QMessageBox.StandardButton.No :
+            return 
 
 
-
-
-
+    def SZBaoCunXuanZeWenBen(self):
+        lujin=QFileDialog.getOpenFileName(self,'选择一个.txt','.','txt(*.txt)')
+        if lujin == ('',''):
+            return
+        wenjian_ming= os.path.basename(lujin[0])
+        print(wenjian_ming)
+        SZlib.SZQieGe(lujin,self.SZFenGeYuYan.currentText(),f'shuju\\{self.SZFenGeYuYan.currentText()}\\{self.SZFenGeZhongLei.currentText()}\\{wenjian_ming}')
+        
 
 
     def QueBaoHuiTuRiQi(self):
